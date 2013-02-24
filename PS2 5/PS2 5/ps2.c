@@ -14,6 +14,8 @@
 #include "spi.h"
 #include "ps2.h"
 
+#define DD_SS PINB4
+
 // Commands for the controller
 const uint8_t PS2_CONFIGMODE[5] = {0x01, 0x43, 0x00, 0x01, 0x00};
 const uint8_t PS2_ANALOGMODE[9] = {0x01, 0x44, 0x00, 0x01, 0x03, 0x00, 0x00, 0x00, 0x00};
@@ -29,7 +31,8 @@ void ps2_poll(uint8_t speed, uint8_t smallmotor)
     uint8_t i = 0;
 
 
-    PORTB &= ~(1<<PB2); // Attention
+    // PORTB &= ~(1<<PB2); // Attention
+	PORTB &= ~(1<<DD_SS); // Attention
 
     // Send header
     rx_buffer[0] = SPI_MTx(0x01);
@@ -51,7 +54,8 @@ void ps2_poll(uint8_t speed, uint8_t smallmotor)
     for(i=0; i<12; i++) ps2.pressure[i] = SPI_MTx(0x00);
 
 
-    PORTB |= (1<<PB2); // Attention off
+    // PORTB |= (1<<PB2); // Attention off
+	PORTB |= (1<<DD_SS); // Attention off
 
 }
 
@@ -59,9 +63,23 @@ void ps2_poll(uint8_t speed, uint8_t smallmotor)
 void ps2_send(const uint8_t *cmd, uint8_t length)
 {
     uint8_t i = 0;
-    PORTB &= ~(1<<PB2);
-    for(i=0; i<length; i++) rx_buffer[i] = SPI_MTx(cmd[i]);
-    PORTB |= (1<<PB2);    
+    PORTB &= ~(1<<DD_SS);
+    for(i=0; i<length; i++) {
+
+		rx_buffer[i] = SPI_MTx(cmd[i]);
+
+	}		
+    PORTB |= (1<<DD_SS);  
+
+	uart_putc(0x0D);
+	for(i=0; i<length; i++) {
+		uart_putc(cmd[i]);	
+	}
+	uart_putc(0x0D);
+	for(i=0; i<length; i++) {
+		uart_putc(rx_buffer[i]);  
+	}
+	
 }
 
 // Go into configuration mode to adjust the settings
@@ -98,18 +116,17 @@ void ps2_exitconfig()
 void ps2_init()
 {
     // Attention pin idle high
-    PORTB |= (1<<PB2);
+    //PORTB |= (1<<DD_SS);
 
     // Configure controller to send everything
     ps2_configmode();
-    _delay_ms(250);
+    //_delay_ms(250);
     ps2_analogmode();
     _delay_ms(250);
-    ps2_setupmotor();
-    _delay_ms(250);
+    //ps2_setupmotor();
+    //_delay_ms(250);
     ps2_returnpres();
     _delay_ms(250);
     ps2_exitconfig();
-
 }
 

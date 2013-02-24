@@ -39,6 +39,10 @@
 #define __HAS_DELAY_CYCLES 1
 #endif
 
+#ifndef F_CPU
+	#define F_CPU 1000000UL  // 1 MHz
+#endif
+
 #include <inttypes.h>
 #include <util/delay_basic.h>
 #include <math.h>
