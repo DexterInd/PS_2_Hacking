@@ -30,8 +30,6 @@ void ps2_poll(uint8_t speed, uint8_t smallmotor)
 {
     uint8_t i = 0;
 
-
-    // PORTB &= ~(1<<PB2); // Attention
 	PORTB &= ~(1<<DD_SS); // Attention
 
     // Send header
@@ -43,7 +41,6 @@ void ps2_poll(uint8_t speed, uint8_t smallmotor)
     rx_buffer[3] = SPI_MTx(smallmotor); // 0x01 => small motor on
     rx_buffer[4] = SPI_MTx(speed);      // Big motor speed
 
-
     // Joystick:
     ps2.rx = SPI_MTx(0x00);
     ps2.ry = SPI_MTx(0x00);
@@ -53,8 +50,6 @@ void ps2_poll(uint8_t speed, uint8_t smallmotor)
     // Pressure buttons:
     for(i=0; i<12; i++) ps2.pressure[i] = SPI_MTx(0x00);
 
-
-    // PORTB |= (1<<PB2); // Attention off
 	PORTB |= (1<<DD_SS); // Attention off
 
 }
