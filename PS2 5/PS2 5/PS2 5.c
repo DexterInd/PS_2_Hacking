@@ -5,9 +5,13 @@
 	- Low		DE
 	
 */
+/*
+// Helpful links:
+// http://www.larsivar.com/cp/comments.php?y=10&m=09&entry=entry100923-223328
+// http://store.curiousinventor.com/guides/PS2  // Breakout pictures, byte by byte analysis of data
+// 
 
-//http://www.larsivar.com/cp/comments.php?y=10&m=09&entry=entry100923-223328
-
+*/
 #define DDR_SPI DDRB
 #define DD_MOSI DDB2
 #define DD_SCK DDB1

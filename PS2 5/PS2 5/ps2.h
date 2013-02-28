@@ -1,13 +1,6 @@
 /* 
  * PS2 controller on Atmel MCU
  * 
- * V1.0  
- * 
- * By: Lars Ivar Miljeteig, September 2010
- * Platform: AVR ATmega168 (avr-gcc)
- * Dependencies: avr/io avr/interrupt delay.h stdint.h larslib.h
- *
- * Reading data from a PlayStation 2 controller
  */
 
 #ifndef PS2_H

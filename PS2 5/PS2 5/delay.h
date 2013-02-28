@@ -40,7 +40,7 @@
 #endif
 
 #ifndef F_CPU
-	#define F_CPU 1000000UL  // 1 MHz
+	#define F_CPU 1600000UL  // 1 MHz
 #endif
 
 #include <inttypes.h>
