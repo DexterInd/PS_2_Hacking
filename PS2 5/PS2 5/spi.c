@@ -25,7 +25,7 @@ void SPI_init()
     //SPI_DDR = (1<<PB3)|(1<<PB5)|(1<<PB2);
  
     // Enable SPI, Master, set clock rate fck/64, high-when-idle (CPOL), sample on trail (CPHA), LSB (DORD)
-    SPCR = (1<<SPE)|(1<<MSTR)|(1<<SPR1)|(0<<SPR0)|(1<<CPOL)|(1<<DORD)|(1<<CPHA);  // SPI Control Register --> P. 182 // 125 khz
+    SPCR = (1<<SPE)|(1<<MSTR)|(1<<SPR1)|(1<<SPR0)|(1<<CPOL)|(1<<DORD)|(1<<CPHA);  // SPI Control Register --> P. 182 // 125 khz
 	//SPCR = (1<<SPE)|(1<<MSTR)|(1<<SPR1)|(1<<CPOL)|(1<<DORD)|(1<<CPHA);  // SPI Control Register --> P. 182 // 250 khz
 			
 }
@@ -34,7 +34,7 @@ void SPI_init()
 uint8_t SPI_MTx(uint8_t dataout)
 {
     uint8_t datain;
-
+	
     // Start transmission (MOSI)
     SPDR = dataout;
 
@@ -45,6 +45,9 @@ uint8_t SPI_MTx(uint8_t dataout)
     _delay_us(30);  
     datain = SPDR;
 
+	PORTB |= (1<<DD_MOSI);		// Both Custom mods: the MISO and the MOSI lines were laying low after the data transmission.
+	PORTB |= (1<<DD_MISO);		// This pulls the line high, completes the transmission.  
+								// The modification makes the code with the MAGNAFORCE controller.  
     return datain;
 }
 

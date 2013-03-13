@@ -12,14 +12,16 @@
 // 
 
 */
+# define F_CPU 16000000		// NOTE: This is actually redefined in the Project Box (PS25 --> Toolchain --> AVR/GNU C Compiler --> Symbols) with the definition "F_CPU=16000000UL"
+							// Defining it there is the secret to getting it defined for the entire project.  
 #define DDR_SPI DDRB
 #define DD_MOSI DDB2
 #define DD_SCK DDB1
 #define DD_SS DDB0
 #define DD_MISO DDB3
 
-# define F_CPU 16000000UL
 
+#include <avr/wdt.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <avr/io.h>
@@ -153,16 +155,59 @@ void test_and_print_raw_data(){
 	uart_putc(0x0D);
 }
 
+void led_init(){
+	/*PF5 -> LED_Analog
+	PF4 -> LED_PS2
+	PF1 -> LED_Data
+	PF0 -> LED_Power
+	*/
+	DDRF = 0xFF;	// Set All DDRF to outputs.
+}
+
+void led_on(){
+	/*PF5 -> LED_Analog
+	PF4 -> LED_PS2
+	PF1 -> LED_Data
+	PF0 -> LED_Power
+	*/
+
+// 	PORTF |=(1<<5);	// LED Analog On
+// 	_delay_ms(35);
+// 	PORTF |=(1<<4);	// LED PS2 On
+// 	_delay_ms(35);	
+// 	PORTF |=(1<<1);	// LED Data On
+// 	_delay_ms(35);	
+// 	PORTF |=(1<<0);	// LED Power On
+// 	_delay_ms(35);
+// 	
+// 	PORTF &= ~(1 << 5);	
+// 	_delay_ms(35);
+// 	PORTF &= ~(1 << 4);
+// 	_delay_ms(35);
+// 	PORTF &= ~(1 << 1);
+// 	_delay_ms(35);		
+// 	PORTF &= ~(1 << 0);
+// 	_delay_ms(35);	
+	PORTF ^= 0xFF;
+	_delay_ms(35);
+}
 
 int main()
 {
+	uint8_t mcusr_at_start = MCUSR;
+	MCUSR = 0;	// enable WDT disable
+	wdt_disable();
+		
+	_delay_s(1);
+	PORTB |= (1<<DD_MOSI);
 	SPI_init();
 	uart_init();
 	ps2_init();
+	// led_init();
 	sei();
 
 	test_and_print_raw_data();
-	_delay_s(5);
+	_delay_s(1);
 	while(1)
 	{
 		test_button_analysis_and_output();	
@@ -170,8 +215,7 @@ int main()
 		uart_putc(rx_buffer[4]);
 		uart_putc(0x0D);
 		_delay_s(1);
-		
-		//PORTB |= (1<<DD_SS); // Attention off
+		// led_on();
 	}
 
 	return 0;

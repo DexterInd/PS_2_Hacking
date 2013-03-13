@@ -17,11 +17,15 @@
 #define DD_SS PINB4
 
 // Commands for the controller
+
 const uint8_t PS2_CONFIGMODE[5] = {0x01, 0x43, 0x00, 0x01, 0x00};
-const uint8_t PS2_ANALOGMODE[9] = {0x01, 0x44, 0x00, 0x01, 0x03, 0x00, 0x00, 0x00, 0x00};
-const uint8_t PS2_SETUPMOTOR[9] = {0x01, 0x4D, 0x00, 0x00, 0x01, 0xff, 0xff, 0xff, 0xff};
-const uint8_t PS2_RETURNPRES[9] = {0x01, 0x4f, 0x00, 0xFF, 0xFF, 0x03, 0x00, 0x00, 0x00};
-const uint8_t PS2_EXITCONFIG[9] = {0x01, 0x43, 0x00, 0x00, 0x5a, 0x5a, 0x5a, 0x5a, 0x5a};
+// const uint8_t PS2_ANALOGMODE[9] = {0x01, 0x44, 0x00, 0x01, 0x03, 0x00, 0x00, 0x00, 0x00};
+const uint8_t PS2_ANALOGMODE[9] = {0x01, 0x44, 0x00, 0x01, 0x00};
+// const uint8_t PS2_SETUPMOTOR[9] = {0x01, 0x4D, 0x00, 0x00, 0x01, 0xff, 0xff, 0xff, 0xff};
+const uint8_t PS2_SETUPMOTOR[9] = {0x01, 0x4D, 0x00, 0x00, 0x01};
+// const uint8_t PS2_RETURNPRES[9] = {0x01, 0x4f, 0x00, 0xFF, 0xFF, 0x03, 0x00, 0x00, 0x00};	// this is not called by the mindsensors part
+// const uint8_t PS2_EXITCONFIG[9] = {0x01, 0x43, 0x00, 0x00, 0x5a, 0x5a, 0x5a, 0x5a, 0x5a};
+const uint8_t PS2_EXITCONFIG[9] = {0x01, 0x43, 0x00, 0x00, 0x00}; 
 
 // The poll command is sent to get the status of each button,
 //  and to set the speed of the motors. Can also turn on the
@@ -32,6 +36,8 @@ void ps2_poll(uint8_t speed, uint8_t smallmotor)
 
 	PORTB &= ~(1<<DD_SS); // Attention
 
+	_delay_ms(1);
+	
     // Send header
     rx_buffer[0] = SPI_MTx(0x01);
     rx_buffer[1] = SPI_MTx(0x42);
@@ -48,7 +54,7 @@ void ps2_poll(uint8_t speed, uint8_t smallmotor)
     ps2.ly = SPI_MTx(0x00);
 
     // Pressure buttons:
-    for(i=0; i<12; i++) ps2.pressure[i] = SPI_MTx(0x00);
+    // for(i=0; i<12; i++) ps2.pressure[i] = SPI_MTx(0x00);  // 
 
 	PORTB |= (1<<DD_SS); // Attention off
 
@@ -86,25 +92,25 @@ void ps2_configmode()
 // Force analog mode to enable pressure values
 void ps2_analogmode()
 {
-    ps2_send(PS2_ANALOGMODE, 9);
+    ps2_send(PS2_ANALOGMODE, 5);
 }
 
 // Enable the internal vibration motors
 void ps2_setupmotor()
 {
-    ps2_send(PS2_SETUPMOTOR, 9);
+    ps2_send(PS2_SETUPMOTOR, 5);
 }
 
 // Ask to get the pressure values as well
-void ps2_returnpres()
-{
-    ps2_send(PS2_RETURNPRES, 9);
-}
+// void ps2_returnpres()
+// {
+//     ps2_send(PS2_RETURNPRES, 9);
+// }
 
 // Exit configuration mode
 void ps2_exitconfig()
 {
-    ps2_send(PS2_EXITCONFIG, 9);
+    ps2_send(PS2_EXITCONFIG, 5);
 }
 
 // Initialize the ps2 controller
@@ -115,12 +121,12 @@ void ps2_init()
 
     // Configure controller to send everything
     ps2_configmode();
-    //_delay_ms(250);
+    _delay_ms(250);
     ps2_analogmode();
     _delay_ms(250);
     //ps2_setupmotor();
     //_delay_ms(250);
-    ps2_returnpres();
+    //ps2_returnpres();
     _delay_ms(250);
     ps2_exitconfig();
 }

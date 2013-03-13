@@ -21,23 +21,23 @@
     <OverrideVtorValue />
     <eraseonlaunchrule>0</eraseonlaunchrule>
     <AsfVersion>3.3.0</AsfVersion>
-    <avrtoolinterface>JTAG</avrtoolinterface>
+    <avrtoolinterface>ISP</avrtoolinterface>
     <avrtool>com.atmel.avrdbg.tool.ispmk2</avrtool>
     <com_atmel_avrdbg_tool_ispmk2>
-      <ToolType xmlns="">com.atmel.avrdbg.tool.ispmk2</ToolType>
-      <ToolName xmlns="">AVRISP mkII</ToolName>
-      <ToolNumber xmlns="">000200128687</ToolNumber>
-      <KeepTimersRunning xmlns="">true</KeepTimersRunning>
-      <OverrideVtor xmlns="">false</OverrideVtor>
-      <OverrideVtorValue xmlns="">
+      <ToolType>com.atmel.avrdbg.tool.ispmk2</ToolType>
+      <ToolName>AVRISP mkII</ToolName>
+      <ToolNumber>000200128687</ToolNumber>
+      <KeepTimersRunning>true</KeepTimersRunning>
+      <OverrideVtor>false</OverrideVtor>
+      <OverrideVtorValue>
       </OverrideVtorValue>
-      <Channel xmlns="">
+      <Channel>
         <host>127.0.0.1</host>
-        <port>62984</port>
+        <port>50289</port>
         <ssl>False</ssl>
       </Channel>
-      <ToolOptions xmlns="">
-        <InterfaceName>JTAG</InterfaceName>
+      <ToolOptions>
+        <InterfaceName>ISP</InterfaceName>
         <InterfaceProperties>
           <JtagDbgClock>249000</JtagDbgClock>
           <JtagProgClock>1000000</JtagProgClock>
@@ -60,7 +60,11 @@
         <avrgcc.common.outputfiles.eep>True</avrgcc.common.outputfiles.eep>
         <avrgcc.compiler.general.ChangeDefaultCharTypeUnsigned>True</avrgcc.compiler.general.ChangeDefaultCharTypeUnsigned>
         <avrgcc.compiler.general.ChangeDefaultBitFieldUnsigned>True</avrgcc.compiler.general.ChangeDefaultBitFieldUnsigned>
-        <avrgcc.compiler.optimization.level>Optimize for size (-Os)</avrgcc.compiler.optimization.level>
+        <avrgcc.compiler.symbols.DefSymbols>
+          <ListValues>
+            <Value>F_CPU=16000000UL</Value>
+          </ListValues>
+        </avrgcc.compiler.symbols.DefSymbols>
         <avrgcc.compiler.optimization.PackStructureMembers>True</avrgcc.compiler.optimization.PackStructureMembers>
         <avrgcc.compiler.optimization.AllocateBytesNeededForEnum>True</avrgcc.compiler.optimization.AllocateBytesNeededForEnum>
         <avrgcc.compiler.warnings.AllWarnings>True</avrgcc.compiler.warnings.AllWarnings>
@@ -69,8 +73,12 @@
             <Value>m</Value>
           </ListValues>
         </avrgcc.linker.libraries.Libraries>
+        <avrgcc.compiler.optimization.level>Optimize for size (-Os)</avrgcc.compiler.optimization.level>
       </AvrGcc>
     </ToolchainSettings>
+    <PreBuildEvent>
+    </PreBuildEvent>
+    <UsesExternalMakeFile>False</UsesExternalMakeFile>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
     <ToolchainSettings>
@@ -80,19 +88,26 @@
         <avrgcc.common.outputfiles.eep>True</avrgcc.common.outputfiles.eep>
         <avrgcc.compiler.general.ChangeDefaultCharTypeUnsigned>True</avrgcc.compiler.general.ChangeDefaultCharTypeUnsigned>
         <avrgcc.compiler.general.ChangeDefaultBitFieldUnsigned>True</avrgcc.compiler.general.ChangeDefaultBitFieldUnsigned>
-        <avrgcc.compiler.optimization.level>Optimize (-O1)</avrgcc.compiler.optimization.level>
+        <avrgcc.compiler.symbols.DefSymbols>
+          <ListValues>
+            <Value>F_CPU=16000000UL</Value>
+          </ListValues>
+        </avrgcc.compiler.symbols.DefSymbols>
         <avrgcc.compiler.optimization.PackStructureMembers>True</avrgcc.compiler.optimization.PackStructureMembers>
         <avrgcc.compiler.optimization.AllocateBytesNeededForEnum>True</avrgcc.compiler.optimization.AllocateBytesNeededForEnum>
-        <avrgcc.compiler.optimization.DebugLevel>Default (-g2)</avrgcc.compiler.optimization.DebugLevel>
         <avrgcc.compiler.warnings.AllWarnings>True</avrgcc.compiler.warnings.AllWarnings>
         <avrgcc.linker.libraries.Libraries>
           <ListValues>
             <Value>m</Value>
           </ListValues>
         </avrgcc.linker.libraries.Libraries>
+        <avrgcc.compiler.optimization.level>Optimize (-O1)</avrgcc.compiler.optimization.level>
+        <avrgcc.compiler.optimization.DebugLevel>Default (-g2)</avrgcc.compiler.optimization.DebugLevel>
         <avrgcc.assembler.debugging.DebugLevel>Default (-Wa,-g)</avrgcc.assembler.debugging.DebugLevel>
       </AvrGcc>
     </ToolchainSettings>
+    <PreBuildEvent>
+    </PreBuildEvent>
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="delay.h">
